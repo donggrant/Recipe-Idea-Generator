@@ -78,11 +78,9 @@ class _SignInState extends State<SignIn> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          Constants().setPageToShow("Loading");
                           dynamic result = await _auth
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
-                            Constants().setPageToShow("Sign In");
                             setState(() {
                               error =
                               'could not sign in with those credentials';
