@@ -4,8 +4,7 @@ import 'package:recipic/models/constants.dart';
 
 class SignIn extends StatefulWidget {
 
-  final Function toggleView;
-  SignIn({this.toggleView}); // constructor for SignIn class
+  SignIn(); // constructor for SignIn class
 
   @override
   _SignInState createState() => _SignInState();
