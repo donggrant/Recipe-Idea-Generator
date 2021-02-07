@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recipic/pages/sign_in.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/models/constants.dart';
 
@@ -16,8 +15,6 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  bool showLoadingPage = false;
-  bool showSignInPage = false;
 
   // text field state
   String email = '';
@@ -26,13 +23,6 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    if (showLoadingPage && !showSignInPage) {
-      return Loading();
-    }
-    else if (!showLoadingPage && showSignInPage) {
-      return SignIn();
-    }
-    else {
       return Scaffold(
         backgroundColor: Colors.grey[350],
         appBar: AppBar(
@@ -105,5 +95,4 @@ class _RegisterState extends State<Register> {
         ),
       );
     }
-  }
 }

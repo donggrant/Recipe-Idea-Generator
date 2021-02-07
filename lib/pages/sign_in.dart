@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recipic/pages/forgot_password.dart';
-import 'package:recipic/pages/register.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/models/constants.dart';
 
@@ -17,11 +15,6 @@ class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-
-  // These three boolean variables determine which page is shown when this widget is rebuilt
-  bool showLoadingPage = false;
-  bool showForgotPasswordPage = false;
-  bool showRegisterPage = false;
 
   // text field state
   String email = '';
@@ -93,7 +86,6 @@ class _SignInState extends State<SignIn> {
                             setState(() {
                               error =
                               'could not sign in with those credentials';
-                              showLoadingPage = false;
                             });
                           } else {
                             Constants().setPageToShow("Home");

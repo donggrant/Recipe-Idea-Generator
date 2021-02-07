@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/models/constants.dart';
-import 'package:recipic/pages/sign_in.dart';
 import 'dart:developer';
 
 class ForgotPassword extends StatefulWidget {
@@ -16,7 +15,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  bool showSignInPage = false;
 
   // text field state
   String email = '';
