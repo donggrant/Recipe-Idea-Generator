@@ -89,11 +89,14 @@ class _SignInState extends State<SignIn> {
                           dynamic result = await _auth
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
+                            Constants().setPageToShow("Sign In");
                             setState(() {
                               error =
                               'could not sign in with those credentials';
                               showLoadingPage = false;
                             });
+                          } else {
+                            Constants().setPageToShow("Home");
                           }
                         }
                       },
