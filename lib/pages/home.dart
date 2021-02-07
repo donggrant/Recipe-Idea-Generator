@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipic/models/constants.dart';
 import 'package:recipic/services/auth.dart';
 
 class Home extends StatelessWidget {
@@ -18,6 +19,7 @@ class Home extends StatelessWidget {
             label: Text('Sign Out'),
             onPressed: () async {
               await _auth.signOut();
+              Constants().setPageToShow("Sign In");
             },
           ),
         ]
