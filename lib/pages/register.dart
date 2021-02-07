@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recipic/pages/sign_in.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/models/constants.dart';
 
@@ -16,8 +15,6 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  bool showLoadingPage = false;
-  bool showSignInPage = false;
 
   // text field state
   String email = '';
@@ -26,13 +23,6 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    if (showLoadingPage && !showSignInPage) {
-      return Loading();
-    }
-    else if (!showLoadingPage && showSignInPage) {
-      return SignIn();
-    }
-    else {
       return Scaffold(
         backgroundColor: Colors.grey[350],
         appBar: AppBar(
@@ -44,10 +34,7 @@ class _RegisterState extends State<Register> {
               icon: Icon(Icons.person),
               label: Text('Sign In'),
               onPressed: () {
-                setState(() {
-                  showLoadingPage = false;
-                  showSignInPage = true;
-                });
+                Constants().setPageToShow("Sign In");
               },
             ),
           ],
@@ -84,13 +71,14 @@ class _RegisterState extends State<Register> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()){
-                      setState(() => showLoadingPage = true);
                       dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                       if(result == null){
                         setState(() {
                           error = 'please supply a valid email';
-                          showLoadingPage = false;
                         });
+                      }
+                      else {
+                        Constants().setPageToShow("Sign In");
                       }
                     }
                   },
@@ -106,5 +94,4 @@ class _RegisterState extends State<Register> {
         ),
       );
     }
-  }
 }
