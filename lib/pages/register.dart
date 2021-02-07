@@ -26,7 +26,7 @@ class _RegisterState extends State<Register> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Email Sent'),
+          title: Text('Verification Email Sent'),
           content: SingleChildScrollView(
             child: Text("We have sent you an email containing a link to "
                 "verify your email address. You must verify your email "
