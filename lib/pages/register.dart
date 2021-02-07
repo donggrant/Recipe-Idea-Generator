@@ -122,10 +122,8 @@ class _RegisterState extends State<Register> {
                           error = 'please supply a valid email';
                         });
                       } else {
-                        emailVerificationDialog();
-                      }
-                      else {
                         Constants().setPageToShow("Sign In");
+                        emailVerificationDialog();
                       }
                     }
                   },
