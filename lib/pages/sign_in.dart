@@ -30,16 +30,6 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    if (showLoadingPage && !showForgotPasswordPage && !showRegisterPage) {
-      return Loading();
-    }
-    else if (!showLoadingPage && showForgotPasswordPage && !showRegisterPage) {
-      return ForgotPassword();
-    }
-    else if (!showLoadingPage && !showForgotPasswordPage && showRegisterPage) {
-      return Register();
-    }
-    else {
       return Scaffold(
         backgroundColor: Colors.grey[350],
         appBar: AppBar(
@@ -51,12 +41,7 @@ class _SignInState extends State<SignIn> {
               icon: Icon(Icons.person),
               label: Text('Register'),
               onPressed: () {
-                setState(() {
-                  // Rebuild the widget, now showing the register page
-                  showLoadingPage = false;
-                  showForgotPasswordPage = false;
-                  showRegisterPage = true;
-                });
+                Constants().setPageToShow("Register");
               },
             ),
           ],
@@ -100,7 +85,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          setState(() => showLoadingPage = true);
+                          Constants().setPageToShow("Loading");
                           dynamic result = await _auth
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
@@ -121,12 +106,7 @@ class _SignInState extends State<SignIn> {
                         ),
                         color: Colors.grey[800],
                         onPressed: () {
-                          setState(() {
-                            // Rebuild the widget, now showing the forgot password page
-                            showLoadingPage = false;
-                            showForgotPasswordPage = true;
-                            showRegisterPage = false;
-                          });
+                          Constants().setPageToShow("Forgot Password");
                         }
                     )
                   ],
@@ -142,5 +122,4 @@ class _SignInState extends State<SignIn> {
         ),
       );
     }
-  }
 }

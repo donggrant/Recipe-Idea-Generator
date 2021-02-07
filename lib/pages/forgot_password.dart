@@ -70,10 +70,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    if (showSignInPage) {
-      return SignIn();
-    }
-    else {
       return Scaffold(
         backgroundColor: Colors.grey[350],
         appBar: AppBar(
@@ -85,9 +81,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               icon: Icon(Icons.person),
               label: Text('Sign In'),
               onPressed: () {
-                setState(() {
-                  showSignInPage = true;
-                });
+                Constants().setPageToShow("Sign In");
               },
             ),
           ],
@@ -139,5 +133,4 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       );
     }
-  }
 }

@@ -44,10 +44,7 @@ class _RegisterState extends State<Register> {
               icon: Icon(Icons.person),
               label: Text('Sign In'),
               onPressed: () {
-                setState(() {
-                  showLoadingPage = false;
-                  showSignInPage = true;
-                });
+                Constants().setPageToShow("Sign In");
               },
             ),
           ],
@@ -84,12 +81,11 @@ class _RegisterState extends State<Register> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()){
-                      setState(() => showLoadingPage = true);
+                      Constants().setPageToShow("Loading");
                       dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                       if(result == null){
                         setState(() {
                           error = 'please supply a valid email';
-                          showLoadingPage = false;
                         });
                       }
                     }
