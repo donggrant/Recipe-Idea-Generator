@@ -8,22 +8,23 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Text("Home Page"),
-          SizedBox(height: 100),
-          FlatButton.icon(
-            icon: Icon(Icons.person),
-            color: Colors.white,
-            label: Text('Sign Out'),
-            onPressed: () async {
-              await _auth.signOut();
-              Constants().setPageToShow("Sign In");
-            },
-          ),
-        ]
-      )
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          elevation: 0.0,
+          title: Text('Home Page'),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.person),
+              label: Text('Sign Out'),
+              onPressed: () async {
+                await _auth.signOut();
+                Constants().setPageToShow("Sign In");
+              },
+            )
+          ],
+        ),
+        body: Container()
     );
   }
 }
