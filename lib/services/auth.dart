@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipic/models/user.dart';
+import 'package:recipic/services/database.dart';
 
 class AuthService {
 
@@ -55,6 +56,7 @@ class AuthService {
       user.sendEmailVerification();
 
       // create new user document in database, here
+      await DatabaseService(uid: user.uid).updateUserData(email, [1, 2, 3]);
 
       return _userFromFirebaseUser(user);
     } catch(e){
