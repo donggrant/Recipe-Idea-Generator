@@ -1,21 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recipic/models/favorite_recipe.dart';
 
 class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
 
   // collection reference
-  final CollectionReference usersCollection = Firestore.instance.collection("users");
+  final CollectionReference favoriteRecipesCollection = Firestore.instance.collection("Favorite Recipes");
 
-  Future updateUserData(String username, List<int> favoriteRecipes) async {
-    return await usersCollection.document(uid).setData({
-      'username': username,
-      'favoriteRecipes': favoriteRecipes,
+  Future updateUserData(String foodName, int recipeID, String recipe) async {
+    return await favoriteRecipesCollection.document(uid).setData({
+      'foodName': foodName,
+      'recipeID': recipeID,
+      'recipe': recipe,
     });
   }
 
+  // favorite recipe list from snapshot
+  List<FavoriteRecipe> _favoriteRecipeListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return FavoriteRecipe(
+        foodName: doc.data['foodName'] ?? '',
+        recipeID: doc.data['recipeID'] ?? 0,
+        recipe: doc.data['recipe'] ?? '',
+      );
+    }).toList();
+  }
+
   // get stream
-  Stream<QuerySnapshot> get userData {
-    return usersCollection.snapshots();
+  Stream<List<FavoriteRecipe>> get favoriteRecipes {
+    return favoriteRecipesCollection.snapshots().map(_favoriteRecipeListFromSnapshot);
   }
 }

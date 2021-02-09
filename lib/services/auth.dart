@@ -56,7 +56,7 @@ class AuthService {
       user.sendEmailVerification();
 
       // create new user document in database, here
-      await DatabaseService(uid: user.uid).updateUserData(email, [1, 2, 3]);
+      await DatabaseService(uid: user.uid).updateUserData("pizza", 1, "how to make pizza");
 
       return _userFromFirebaseUser(user);
     } catch(e){

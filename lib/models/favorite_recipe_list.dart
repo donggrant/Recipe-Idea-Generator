@@ -1,7 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:recipic/models/favorite_recipe.dart';
+
+import 'favorite_recipe_tile.dart';
 
 class FavoriteRecipeList extends StatefulWidget {
   @override
@@ -12,13 +13,14 @@ class _FavoriteRecipeListState extends State<FavoriteRecipeList> {
   @override
   Widget build(BuildContext context) {
 
-    final favoriteRecipes = Provider.of<QuerySnapshot>(context);
-    log("*************************************************");
-    for (var doc in favoriteRecipes.documents) {
-      log(doc.data.toString());
-    }
-    log("*************************************************");
+    final favoriteRecipes = Provider.of<List<FavoriteRecipe>>(context);
 
-    return Container();
+    return ListView.builder(
+        itemCount: favoriteRecipes.length,
+        itemBuilder: (context, index) {
+          // For each item in the favorite recipes list, we return a widget tree
+          return FavoriteRecipeTile(favoriteRecipe: favoriteRecipes[index]);
+        },
+    );
   }
 }
