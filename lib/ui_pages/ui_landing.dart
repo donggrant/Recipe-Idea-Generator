@@ -22,7 +22,7 @@ class _LandingState extends State<Landing> {
           child: Column(
             children: [
               Expanded(
-                flex: 1,
+                flex:1,
                 child: SvgPicture.asset(
                   "images/barbecue.svg",
                 ),
