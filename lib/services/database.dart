@@ -9,7 +9,8 @@ class DatabaseService {
   final CollectionReference favoriteRecipesCollection = Firestore.instance.collection("Favorite Recipes");
 
   Future updateUserData(String foodName, int recipeID, String recipe) async {
-    return await favoriteRecipesCollection.document(uid).setData({
+    return await favoriteRecipesCollection.add({
+      'user': uid,
       'foodName': foodName,
       'recipeID': recipeID,
       'recipe': recipe,
