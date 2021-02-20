@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipic/models/constants.dart';
 
 class Landing extends StatefulWidget {
   @override
@@ -22,7 +22,7 @@ class _LandingState extends State<Landing> {
           child: Column(
             children: [
               Expanded(
-                flex:1,
+                flex: 1,
                 child: SvgPicture.asset(
                   "images/barbecue.svg",
                 ),
@@ -57,19 +57,24 @@ class _LandingState extends State<Landing> {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Center(
-                          child: Text(
-                            "Register",
-                            style: GoogleFonts.lato(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                textStyle: TextStyle(color: Colors.black)),
+                    child: GestureDetector(
+                      onTap: () {
+                        Constants().setPageToShow("Register");
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Center(
+                            child: Text(
+                              "Register",
+                              style: GoogleFonts.lato(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  textStyle: TextStyle(color: Colors.black)),
+                            ),
                           ),
                         ),
                       ),
@@ -79,19 +84,24 @@ class _LandingState extends State<Landing> {
                     width: 20,
                   ),
                   Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Center(
-                          child: Text(
-                            "Sign In",
-                            style: GoogleFonts.lato(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                textStyle: TextStyle(color: Colors.black)),
+                    child: GestureDetector(
+                      onTap: () {
+                        Constants().setPageToShow("Sign In");
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Center(
+                            child: Text(
+                              "Sign In",
+                              style: GoogleFonts.lato(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  textStyle: TextStyle(color: Colors.black)),
+                            ),
                           ),
                         ),
                       ),
