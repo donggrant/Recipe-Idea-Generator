@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipic/models/user.dart';
+import 'package:recipic/pages/wrapper.dart';
 import 'package:recipic/services/auth.dart';
-import 'package:recipic/ui_pages/ui_landing.dart';
 
 //Edited the main.dart to direct to newly designed UI elements
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-        home: Landing(),
+        home: Wrapper(),
         theme: ThemeData.dark(),
       ),
     );
