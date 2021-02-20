@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<FavoriteRecipe> list = DatabaseService(uid: Constants().getAuth().currentUserID).getFavoriteRecipeList();
-    return Scaffold(
+    return StreamProvider<List<FavoriteRecipe>>.value(
+      value: DatabaseService().favoriteRecipes,
+      child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green,
             elevation: 0.0,
@@ -28,6 +29,7 @@ class Home extends StatelessWidget {
             ],
           ),
           body: FavoriteRecipeList(),
+    )
     );
   }
 }
