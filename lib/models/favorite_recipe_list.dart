@@ -12,15 +12,6 @@ class FavoriteRecipeList extends StatefulWidget {
 class _FavoriteRecipeListState extends State<FavoriteRecipeList> {
   @override
   Widget build(BuildContext context) {
-
-    final favoriteRecipes = Provider.of<List<FavoriteRecipe>>(context);
-
-    return ListView.builder(
-        itemCount: favoriteRecipes.length,
-        itemBuilder: (context, index) {
-          // For each item in the favorite recipes list, we return a widget tree
-          return FavoriteRecipeTile(favoriteRecipe: favoriteRecipes[index]);
-        },
-    );
+    return Container();
   }
 }

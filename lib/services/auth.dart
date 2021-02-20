@@ -6,10 +6,12 @@ import 'package:recipic/services/database.dart';
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String currentUserID;
 
   // create user obj based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
     if (user != null) {
+      currentUserID = user.uid;
       return User(uid: user.uid);
     } else {
       return null;
@@ -28,6 +30,7 @@ class AuthService {
     try{
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
+      currentUserID = user.uid;
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());
@@ -41,10 +44,9 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData("pizza", 1, "how to make pizza");
-      await DatabaseService(uid: user.uid).updateUserData("burritos", 2, "how to make burritos");
-      await DatabaseService(uid: user.uid).updateUserData("sandwiches", 3, "how to make sandwiches");
+      await DatabaseService(uid: user.uid).updateUserData([1, 2, 3]);
 
+      currentUserID = user.uid;
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
@@ -62,6 +64,7 @@ class AuthService {
 
       // create new user document in database, here
 
+      currentUserID = user.uid;
       return _userFromFirebaseUser(user);
     } catch(e){
       log(e.toString());
