@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/models/favorite_recipe.dart';
@@ -7,12 +8,9 @@ import 'package:recipic/services/database.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-
-  final AuthService _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
-    List<FavoriteRecipe> list = DatabaseService().getFavoriteRecipeList();
+    List<FavoriteRecipe> list = DatabaseService(uid: Constants().getAuth().currentUserID).getFavoriteRecipeList();
     return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green,
@@ -23,7 +21,7 @@ class Home extends StatelessWidget {
                 icon: Icon(Icons.person),
                 label: Text('Sign Out'),
                 onPressed: () async {
-                  await _auth.signOut();
+                  await Constants().getAuth().signOut();
                   Constants().setPageToShow("Sign In");
                 },
               )

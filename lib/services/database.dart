@@ -19,23 +19,22 @@ class DatabaseService {
   }
 
   List<FavoriteRecipe> getFavoriteRecipeList() {
-    log("Getting favorite recipe list...");
     DocumentReference userDocument = usersCollection.document(uid);
-    log("userDocument.documentID = ${userDocument.documentID}");
+    log("getFavoriteRecipeList() : userDocument.documentID = ${userDocument.documentID}");
 
     List<FavoriteRecipe> result = new List<FavoriteRecipe>();
 
     usersCollection.getDocuments().then((querySnapshot) {
-      log("Printing query snapshots...");
+      log("getFavoriteRecipeList() : >>> Printing query snapshots...");
       for (int i = 0; i < querySnapshot.documents.asMap().length; i++) {
         DocumentSnapshot currentDocument = querySnapshot.documents.asMap()[i];
-        log("DocID: ${currentDocument.documentID}");
-        log("UserID: $uid");
+        log("getFavoriteRecipeList() : >>> >>> DocID: ${currentDocument.documentID}");
+        log("getFavoriteRecipeList() : >>> >>> UserID: $uid");
         List<dynamic> favoriteRecipeIDs = currentDocument.data["favoriteRecipeIDs"];
-        log("favoriteRecipeIDs: ${favoriteRecipeIDs.toString()}");
+        log("getFavoriteRecipeList() : >>> >>> favoriteRecipeIDs: ${favoriteRecipeIDs.toString()}");
         log("**************************************************************");
       }
-      log("Printing query snapshots... finished!");
+      log("getFavoriteRecipeList() : >>> Printing query snapshots... finished!");
     });
 
     return result;

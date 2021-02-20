@@ -5,13 +5,19 @@ import 'package:recipic/services/database.dart';
 
 class AuthService {
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth;
   String currentUserID;
+
+  AuthService() {
+    this._auth = FirebaseAuth.instance;
+    this.currentUserID = "";
+  }
 
   // create user obj based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
     if (user != null) {
       currentUserID = user.uid;
+      log("_userFromFirebaseUser(FirebaseUser user) : currentUserID = ${currentUserID}");
       return User(uid: user.uid);
     } else {
       return null;
@@ -44,9 +50,10 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
+      currentUserID = user.uid;
       await DatabaseService(uid: user.uid).updateUserData([1, 2, 3]);
 
-      currentUserID = user.uid;
+      log("signInWithEmailAndPassword(String email, String password) : currentUserID = ${currentUserID}");
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
