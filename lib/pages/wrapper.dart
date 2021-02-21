@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
-import 'package:recipic/pages/forgot_password.dart';
 import 'package:recipic/pages/home.dart';
 import 'package:recipic/pages/sign_in.dart';
+import 'package:recipic/ui_pages/ui_forgot_password.dart';
 import 'package:recipic/ui_pages/ui_landing.dart';
 import 'package:recipic/ui_pages/ui_register.dart';
 
@@ -28,7 +28,7 @@ class _WrapperState extends State<Wrapper> {
             case "Register":
               return RegisterUI();
             case "Forgot Password":
-              return ForgotPassword();
+              return ForgotPasswordUI();
             case "Home":
               return Home();
             default:
