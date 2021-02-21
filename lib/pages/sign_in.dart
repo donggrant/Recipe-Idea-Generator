@@ -12,7 +12,6 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
 
-  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   // text field state
@@ -77,7 +76,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          dynamic result = await _auth
+                          dynamic result = await Constants().getAuth()
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
