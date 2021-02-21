@@ -27,6 +27,9 @@ class DatabaseService {
     foods.add("fried rice");
     foods.add("burger");
     foods.add("cake");
+    foods.add("salad");
+    foods.add("french fries");
+    foods.add("tacos");
   }
 
   void loadRecipesIntoDatabase() async {
