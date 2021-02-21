@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/services/auth.dart';
@@ -47,7 +48,7 @@ class _RegisterUIState extends State<RegisterUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF6C63FF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -55,26 +56,55 @@ class _RegisterUIState extends State<RegisterUI> {
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Ink(
-                    //Can add background color to back button here
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                    ),
+                  Align(
+                    alignment: Alignment.topLeft,
                     child: BackButton(
+                      color: Color(0xFF6C63FF),
                       onPressed: () {
                         Constants().setPageToShow("Landing");
                       },
                     ),
                   ),
-                  Text(
-                    "Create \nAccount",
-                    style: GoogleFonts.lato(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    height: 200,
+                    child: Flexible(
+                      fit: FlexFit.loose,
+                      child: SvgPicture.asset(
+                        "images/result.svg",
+                      ),
                     ),
                   ),
+                  SizedBox(height: 25),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hello there!",
+                          style: GoogleFonts.lato(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Let's create your account so you can get cooking.",
+                          style: GoogleFonts.sourceSansPro(
+                              fontSize: 17,
+                              textStyle: TextStyle(
+                                color: Colors.grey[600],
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   TextFormField(
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
@@ -97,7 +127,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       setState(() => email = val);
                     },
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 15),
                   TextFormField(
                     style: TextStyle(color: Colors.black),
                     obscureText: true,
@@ -161,7 +191,7 @@ class _RegisterUIState extends State<RegisterUI> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Color(0xFF6C63FF),
                           borderRadius: BorderRadius.circular(20)),
                       child: Padding(
                         padding: const EdgeInsets.all(18.0),
@@ -171,13 +201,13 @@ class _RegisterUIState extends State<RegisterUI> {
                             style: GoogleFonts.lato(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                textStyle: TextStyle(color: Colors.black)),
+                                textStyle: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 5),
                   Text(
                     error,
                     style: TextStyle(color: Colors.red, fontSize: 14),
