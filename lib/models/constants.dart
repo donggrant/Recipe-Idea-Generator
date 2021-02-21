@@ -5,9 +5,18 @@ import 'package:recipic/services/auth.dart';
 class Constants {
   static ValueNotifier<String> _pageToShow = ValueNotifier<String>("Landing");
   static AuthService _auth = AuthService();
+  static String currentUserID = "";
 
   AuthService getAuth() {
     return _auth;
+  }
+
+  String getCurrentUserID() {
+    return currentUserID;
+  }
+
+  void setCurrentUserID(String value) {
+    currentUserID = value;
   }
 
   ValueNotifier<String> getPageToShow() {

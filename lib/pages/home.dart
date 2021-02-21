@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<FavoriteRecipe>>.value(
-      value: DatabaseService().favoriteRecipes,
+      value: DatabaseService(uid: Constants().getCurrentUserID()).favoriteRecipes,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green,

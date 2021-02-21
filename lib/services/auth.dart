@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:recipic/models/constants.dart';
 import 'package:recipic/models/user.dart';
 import 'package:recipic/services/database.dart';
 
@@ -16,8 +17,8 @@ class AuthService {
   // create user obj based on FirebaseUser
   User _userFromFirebaseUser(FirebaseUser user) {
     if (user != null) {
-      currentUserID = user.uid;
-      log("_userFromFirebaseUser(FirebaseUser user) : currentUserID = ${currentUserID}");
+      Constants().setCurrentUserID(user.uid);
+      log("_userFromFirebaseUser(FirebaseUser user) : currentUserID = ${Constants().getCurrentUserID()}");
       return User(uid: user.uid);
     } else {
       return null;
@@ -36,7 +37,7 @@ class AuthService {
     try{
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
-      currentUserID = user.uid;
+      Constants().setCurrentUserID(user.uid);
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());
@@ -50,10 +51,8 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      currentUserID = user.uid;
-      await DatabaseService(uid: user.uid).updateUserData([1, 2, 3]);
+      Constants().setCurrentUserID(user.uid);
 
-      log("signInWithEmailAndPassword(String email, String password) : currentUserID = ${currentUserID}");
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
@@ -71,7 +70,7 @@ class AuthService {
 
       // create new user document in database, here
 
-      currentUserID = user.uid;
+      Constants().setCurrentUserID(user.uid);
       return _userFromFirebaseUser(user);
     } catch(e){
       log(e.toString());

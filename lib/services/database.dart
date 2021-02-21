@@ -30,24 +30,27 @@ class DatabaseService {
       DocumentSnapshot currentDocument = snapshot.documents.asMap()[i];
       String currentDocumentID = currentDocument.documentID;
 
+      log("Currently on document = $currentDocumentID");
       // Get the document for the currently signed-in user
+      log("Checking if $currentDocumentID == $uid");
       if (currentDocumentID == uid) {
         // Retrieve the array of favorite recipe IDs
         favoriteRecipeIDs = currentDocument.data["favoriteRecipeIDs"];
         log("getFavoriteRecipeList() : >>> Found favoriteRecipeIDs: ${favoriteRecipeIDs.toString()}");
+        break; // terminate the loop because we've gotten the document we want
       }
     }
     log("getFavoriteRecipeList() : >>> Printing query snapshots... finished!");
 
     // Create FavoriteRecipe objects for each favoriteRecipeID
     List<FavoriteRecipe> favoriteRecipes = new List<FavoriteRecipe>();
-    log("getFavoriteRecipeList = ${favoriteRecipes.toString()}");
+    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects...");
     for (int i = 0; i < favoriteRecipeIDs.length; i++) {
-      favoriteRecipes.add(new FavoriteRecipe(foodName: "", recipeID: favoriteRecipeIDs[i], recipe: ""));
-      log("getFavoriteRecipeList = ${favoriteRecipes.toString()}");
+      favoriteRecipes.add(new FavoriteRecipe(foodName: "food id ${favoriteRecipeIDs[i]}", recipeID: favoriteRecipeIDs[i], recipe: ""));
+      log("getFavoriteRecipeList (i = $i) = ${favoriteRecipes.toString()}");
     }
+    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects... finished!");
 
-    log("getFavoriteRecipeList = ${favoriteRecipes.toString()}");
     return favoriteRecipes;
   }
 
@@ -66,7 +69,7 @@ class DatabaseService {
   }
 
   Stream<List<FavoriteRecipe>> get favoriteRecipes {
-    return usersCollection.snapshots().map(_favoriteRecipeListFromSnapshot);
-    //return usersCollection.snapshots().map(getFavoriteRecipeList);
+    //return usersCollection.snapshots().map(_favoriteRecipeListFromSnapshot);
+    return usersCollection.snapshots().map(getFavoriteRecipeList);
   }
 }
