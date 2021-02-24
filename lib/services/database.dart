@@ -39,8 +39,6 @@ class DatabaseService {
   }
   
   Future updateUserData(List<int> favoriteRecipeIDs) async {
-    //CollectionReference favoriteRecipesCollection = userDocument.collection("Favorite Recipes");
-    //userDocument.setData({}); // without this, the document won't show up in the query snapshot
     return await usersCollection.document(uid).setData({
       "favoriteRecipeIDs": favoriteRecipeIDs
     });

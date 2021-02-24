@@ -13,11 +13,10 @@ class FavoriteRecipeTile extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: ListTile(
-          leading: CircleAvatar(
-            radius: 25.0,
-            backgroundColor: Colors.blueAccent,
+          tileColor: Color(0xFF6C63FF),
+          title: Text(favoriteRecipe.foodName,
+            style: TextStyle(color: Colors.white),
           ),
-          title: Text(favoriteRecipe.foodName),
         ),
       ),
     );

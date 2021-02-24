@@ -14,13 +14,16 @@ class Home extends StatelessWidget {
       value: DatabaseService(uid: Constants().getCurrentUserID()).favoriteRecipes,
       child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.green,
+            backgroundColor: Color(0xFF6C63FF),
             elevation: 0.0,
             title: Text('Home Page'),
             actions: [
               FlatButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Sign Out'),
+                icon: Icon(Icons.person, color: Colors.white),
+                label: Text(
+                  'Sign Out',
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () async {
                   await Constants().getAuth().signOut();
                   Constants().setPageToShow("Sign In");
