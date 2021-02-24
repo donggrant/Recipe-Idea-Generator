@@ -10,6 +10,7 @@ class DatabaseService {
 
   DatabaseService({String uid}) {
     this.uid = uid;
+    foods = new List<String>();
     this.recipeData; // call the function that gets the recipe data
     //addRecipesToDatabase();
   }
@@ -84,7 +85,6 @@ class DatabaseService {
 
   void get recipeData {
     log("Retrieving recipe data...");
-    foods = new List<String>();
     recipesCollection.snapshots().elementAt(0).then((x) {
       List<DocumentSnapshot> docsList = x.documents;
 
