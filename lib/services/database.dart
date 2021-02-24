@@ -10,16 +10,16 @@ class DatabaseService {
 
   DatabaseService({String uid}) {
     this.uid = uid;
-    createFoodList();
-    loadRecipesIntoDatabase();
+    this.recipeData; // call the function that gets the recipe data
+    //addRecipesToDatabase();
   }
 
   // collection reference
   final CollectionReference usersCollection = Firestore.instance.collection("Users");
   final CollectionReference recipesCollection = Firestore.instance.collection("Recipes");
 
-  void createFoodList() {
-    foods = new List<String>();
+  // Method for manually adding recipes to the database, if necessary
+  void addRecipesToDatabase() async {
     foods.add("pizza");
     foods.add("sandwich");
     foods.add("burrito");
@@ -30,9 +30,7 @@ class DatabaseService {
     foods.add("salad");
     foods.add("french fries");
     foods.add("tacos");
-  }
 
-  void loadRecipesIntoDatabase() async {
     for (int i = 0; i < foods.length; i++) {
       await recipesCollection.document(i.toString()).setData({"food": foods[i]});
     }
@@ -82,5 +80,22 @@ class DatabaseService {
 
   Stream<List<FavoriteRecipe>> get favoriteRecipes {
     return usersCollection.snapshots().map(getFavoriteRecipesFromSnapshot);
+  }
+
+  void get recipeData {
+    log("Retrieving recipe data...");
+    foods = new List<String>();
+    recipesCollection.snapshots().elementAt(0).then((x) {
+      List<DocumentSnapshot> docsList = x.documents;
+
+      // Get the recipe data from the database, and populate the food list
+      // instance variable with this data
+      log("${docsList.length} recipes found");
+      for (int i = 0; i < docsList.length; i++) {
+        String foodName = docsList[i].data["food"];
+        log("Retrieved recipe ${docsList[i].documentID}: $foodName");
+        foods.add(foodName);
+      }
+    });
   }
 }
