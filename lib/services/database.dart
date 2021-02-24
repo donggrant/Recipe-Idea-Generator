@@ -44,12 +44,10 @@ class DatabaseService {
     });
   }
 
-  List<FavoriteRecipe> getFavoriteRecipeList(QuerySnapshot snapshot) {
-    DocumentReference userDocument = usersCollection.document(uid);
-
+  List<FavoriteRecipe> getFavoriteRecipesFromSnapshot(QuerySnapshot snapshot) {
     // Iterate through all users' favorite recipe documents
     List<dynamic> favoriteRecipeIDs = new List<dynamic>();
-    log("getFavoriteRecipeList() : >>> Printing query snapshots...");
+    log("Printing query snapshots...");
     for (int i = 0; i < snapshot.documents.asMap().length; i++) {
       DocumentSnapshot currentDocument = snapshot.documents.asMap()[i];
       String currentDocumentID = currentDocument.documentID;
@@ -58,18 +56,17 @@ class DatabaseService {
       if (currentDocumentID == uid) {
         // Retrieve the array of favorite recipe IDs
         favoriteRecipeIDs = currentDocument.data["favoriteRecipeIDs"];
-        log("getFavoriteRecipeList() : >>> Found favoriteRecipeIDs for $uid: ${favoriteRecipeIDs.toString()}");
+        log("Found favoriteRecipeIDs for $uid: ${favoriteRecipeIDs.toString()}");
         break; // terminate the loop because we've gotten the document we want
       }
     }
-    log("getFavoriteRecipeList() : >>> Printing query snapshots... finished!");
+    log("Printing query snapshots... finished!");
 
     // Create FavoriteRecipe objects for each favoriteRecipeID
     List<FavoriteRecipe> favoriteRecipes = new List<FavoriteRecipe>();
-    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects...");
-    log("getFavoriteRecipeList() : >>> Using food list ${foods.toString()}");
+    log("Creating list of FavoriteRecipe objects...");
     for (int i = 0; i < favoriteRecipeIDs.length; i++) {
-      log("getFavoriteRecipeList() : >>> >>> Creating FavoriteRecipe object for recipeID ${favoriteRecipeIDs[i]} a.k.a. ${foods[i]}");
+      log("Creating FavoriteRecipe object for recipeID ${favoriteRecipeIDs[i]} (${foods[i]})");
       favoriteRecipes.add(
           new FavoriteRecipe(
               foodName: foods[favoriteRecipeIDs[i]],
@@ -78,12 +75,12 @@ class DatabaseService {
           )
       );
     }
-    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects... finished!");
+    log("Creating list of FavoriteRecipe objects... finished!");
 
     return favoriteRecipes;
   }
 
   Stream<List<FavoriteRecipe>> get favoriteRecipes {
-    return usersCollection.snapshots().map(getFavoriteRecipeList);
+    return usersCollection.snapshots().map(getFavoriteRecipesFromSnapshot);
   }
 }
