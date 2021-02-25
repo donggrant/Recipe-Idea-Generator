@@ -23,7 +23,7 @@ class FavoriteRecipeTile extends StatelessWidget {
             log("Opening recipe details for ${favoriteRecipe.foodName}");
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RecipeDetails()),
+              MaterialPageRoute(builder: (context) => RecipeDetails(recipeDetails: favoriteRecipe.recipe)),
             );
           },
         ),

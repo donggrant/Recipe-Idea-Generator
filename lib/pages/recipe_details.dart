@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class RecipeDetails extends StatelessWidget {
+  final String recipeDetails;
+
+  RecipeDetails({this.recipeDetails});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,7 +13,7 @@ class RecipeDetails extends StatelessWidget {
         elevation: 0.0,
         title: Text('Recipe Details'),
       ),
-      body: Container(),
+      body: Text(recipeDetails),
     );
   }
 }
