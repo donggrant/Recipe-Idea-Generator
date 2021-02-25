@@ -31,7 +31,15 @@ class Home extends StatelessWidget {
               )
             ],
           ),
-          body: FavoriteRecipeList(),
+          body: Column(
+            children: [
+              RaisedButton(
+                  child: Text("Get New Recipe Recommendation"),
+                  onPressed: () {}
+              ),
+              FavoriteRecipeList(),
+            ],
+          ),
     )
     );
   }

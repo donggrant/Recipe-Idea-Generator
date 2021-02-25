@@ -20,12 +20,14 @@ class _FavoriteRecipeListState extends State<FavoriteRecipeList> {
       favoriteRecipes = List<FavoriteRecipe>();
     }
 
-    return ListView.builder(
-      itemCount: favoriteRecipes.length,
-      itemBuilder: (context, index) {
-        // For each item in the favorite recipes list, we return a widget tree
-        return FavoriteRecipeTile(favoriteRecipe: favoriteRecipes[index]);
-      },
+    return Expanded(
+      child: ListView.builder(
+        itemCount: favoriteRecipes.length,
+        itemBuilder: (context, index) {
+          // For each item in the favorite recipes list, we return a widget tree
+          return FavoriteRecipeTile(favoriteRecipe: favoriteRecipes[index]);
+        },
+      ),
     );
   }
 }
