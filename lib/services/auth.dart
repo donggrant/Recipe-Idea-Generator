@@ -7,11 +7,9 @@ import 'package:recipic/services/database.dart';
 class AuthService {
 
   FirebaseAuth _auth;
-  String currentUserID;
 
   AuthService() {
     this._auth = FirebaseAuth.instance;
-    this.currentUserID = "";
   }
 
   // create user obj based on FirebaseUser
