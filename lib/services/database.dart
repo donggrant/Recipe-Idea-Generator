@@ -6,11 +6,11 @@ import 'package:recipic/models/favorite_recipe_tile.dart';
 
 class DatabaseService {
   String uid;
-  List<String> foods;
+  List<Map<String, String>> recipes;
 
   DatabaseService({String uid}) {
     this.uid = uid;
-    foods = new List<String>();
+    recipes = new List<Map<String, String>>();
     this.recipeData; // call the function that gets the recipe data
     //addRecipesToDatabase();
   }
@@ -21,19 +21,19 @@ class DatabaseService {
 
   // Method for manually adding recipes to the database, if necessary
   void addRecipesToDatabase() async {
-    foods.add("pizza");
-    foods.add("sandwich");
-    foods.add("burrito");
-    foods.add("cookies");
-    foods.add("fried rice");
-    foods.add("burger");
-    foods.add("cake");
-    foods.add("salad");
-    foods.add("french fries");
-    foods.add("tacos");
+    recipes.add({"food": "pizza", "recipe": "How to make pizza"});
+    recipes.add({"food": "sandwich", "recipe": "How to make a sandwich"});
+    recipes.add({"food": "burrito", "recipe": "How to make a burrito"});
+    recipes.add({"food": "cookies", "recipe": "How to make cookies"});
+    recipes.add({"food": "fried rice", "recipe": "How to make fried rice"});
+    recipes.add({"food": "burger", "recipe": "How to make a burger"});
+    recipes.add({"food": "cake", "recipe": "How to make cake"});
+    recipes.add({"food": "salad", "recipe": "How to make salad"});
+    recipes.add({"food": "french fries", "recipe": "How to make french fries"});
+    recipes.add({"food": "tacos", "recipe": "How to make tacos"});
 
-    for (int i = 0; i < foods.length; i++) {
-      await recipesCollection.document(i.toString()).setData({"food": foods[i]});
+    for (int i = 0; i < recipes.length; i++) {
+      await recipesCollection.document(i.toString()).setData(recipes[i]);
     }
   }
   
@@ -65,12 +65,12 @@ class DatabaseService {
     List<FavoriteRecipe> favoriteRecipes = new List<FavoriteRecipe>();
     log("Creating list of FavoriteRecipe objects...");
     for (int i = 0; i < favoriteRecipeIDs.length; i++) {
-      log("Creating FavoriteRecipe object for recipeID ${favoriteRecipeIDs[i]} (${foods[i]})");
+      log("Creating FavoriteRecipe object for recipeID ${favoriteRecipeIDs[i]}");
       favoriteRecipes.add(
           new FavoriteRecipe(
-              foodName: foods[favoriteRecipeIDs[i]],
+              foodName: recipes[favoriteRecipeIDs[i]].keys.elementAt(0),
               recipeID: favoriteRecipeIDs[i],
-              recipe: ""
+              recipe: recipes[favoriteRecipeIDs[i]].values.elementAt(0),
           )
       );
     }
@@ -93,9 +93,11 @@ class DatabaseService {
       log("${docsList.length} recipes found");
       for (int i = 0; i < docsList.length; i++) {
         String foodName = docsList[i].data["food"];
+        String foodRecipe = docsList[i].data["recipe"];
         log("Retrieved recipe ${docsList[i].documentID}: $foodName");
-        foods.add(foodName);
+        recipes.add({foodName: foodRecipe});
       }
     });
+    log("Final recipe list retrieved from database: ${recipes.toString()}");
   }
 }
