@@ -5,71 +5,99 @@ import 'package:recipic/models/favorite_recipe.dart';
 import 'package:recipic/models/favorite_recipe_tile.dart';
 
 class DatabaseService {
-  final String uid;
-  DatabaseService({this.uid});
+  String uid;
+  List<Map<String, String>> recipes;
+
+  DatabaseService({String uid}) {
+    this.uid = uid;
+    recipes = new List<Map<String, String>>();
+    this.recipeData; // call the function that gets the recipe data
+    //addRecipesToDatabase();
+  }
 
   // collection reference
   final CollectionReference usersCollection = Firestore.instance.collection("Users");
+  final CollectionReference recipesCollection = Firestore.instance.collection("Recipes");
 
+  // Method for manually adding recipes to the database, if necessary
+  void addRecipesToDatabase() async {
+    recipes.add({"food": "pizza", "recipe": "How to make pizza"});
+    recipes.add({"food": "sandwich", "recipe": "How to make a sandwich"});
+    recipes.add({"food": "burrito", "recipe": "How to make a burrito"});
+    recipes.add({"food": "cookies", "recipe": "How to make cookies"});
+    recipes.add({"food": "fried rice", "recipe": "How to make fried rice"});
+    recipes.add({"food": "burger", "recipe": "How to make a burger"});
+    recipes.add({"food": "cake", "recipe": "How to make cake"});
+    recipes.add({"food": "salad", "recipe": "How to make salad"});
+    recipes.add({"food": "french fries", "recipe": "How to make french fries"});
+    recipes.add({"food": "tacos", "recipe": "How to make tacos"});
+
+    for (int i = 0; i < recipes.length; i++) {
+      await recipesCollection.document(i.toString()).setData(recipes[i]);
+    }
+  }
+  
   Future updateUserData(List<int> favoriteRecipeIDs) async {
-    //CollectionReference favoriteRecipesCollection = userDocument.collection("Favorite Recipes");
-    //userDocument.setData({}); // without this, the document won't show up in the query snapshot
     return await usersCollection.document(uid).setData({
       "favoriteRecipeIDs": favoriteRecipeIDs
     });
   }
 
-  List<FavoriteRecipe> getFavoriteRecipeList(QuerySnapshot snapshot) {
-    DocumentReference userDocument = usersCollection.document(uid);
-    log("getFavoriteRecipeList() : userDocument.documentID = ${userDocument.documentID}");
-
+  List<FavoriteRecipe> getFavoriteRecipesFromSnapshot(QuerySnapshot snapshot) {
     // Iterate through all users' favorite recipe documents
     List<dynamic> favoriteRecipeIDs = new List<dynamic>();
-    log("getFavoriteRecipeList() : >>> Printing query snapshots...");
+    log("Printing query snapshots...");
     for (int i = 0; i < snapshot.documents.asMap().length; i++) {
       DocumentSnapshot currentDocument = snapshot.documents.asMap()[i];
       String currentDocumentID = currentDocument.documentID;
 
-      log("Currently on document = $currentDocumentID");
       // Get the document for the currently signed-in user
-      log("Checking if $currentDocumentID == $uid");
       if (currentDocumentID == uid) {
         // Retrieve the array of favorite recipe IDs
         favoriteRecipeIDs = currentDocument.data["favoriteRecipeIDs"];
-        log("getFavoriteRecipeList() : >>> Found favoriteRecipeIDs: ${favoriteRecipeIDs.toString()}");
+        log("Found favoriteRecipeIDs for $uid: ${favoriteRecipeIDs.toString()}");
         break; // terminate the loop because we've gotten the document we want
       }
     }
-    log("getFavoriteRecipeList() : >>> Printing query snapshots... finished!");
+    log("Printing query snapshots... finished!");
 
     // Create FavoriteRecipe objects for each favoriteRecipeID
     List<FavoriteRecipe> favoriteRecipes = new List<FavoriteRecipe>();
-    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects...");
+    log("Creating list of FavoriteRecipe objects...");
     for (int i = 0; i < favoriteRecipeIDs.length; i++) {
-      favoriteRecipes.add(new FavoriteRecipe(foodName: "food id ${favoriteRecipeIDs[i]}", recipeID: favoriteRecipeIDs[i], recipe: ""));
-      log("getFavoriteRecipeList (i = $i) = ${favoriteRecipes.toString()}");
+      log("Creating FavoriteRecipe object for recipeID ${favoriteRecipeIDs[i]}");
+      favoriteRecipes.add(
+          new FavoriteRecipe(
+              foodName: recipes[favoriteRecipeIDs[i]].keys.elementAt(0),
+              recipeID: favoriteRecipeIDs[i],
+              recipe: recipes[favoriteRecipeIDs[i]].values.elementAt(0),
+          )
+      );
     }
-    log("getFavoriteRecipeList() : >>> Creating list of FavoriteRecipe objects... finished!");
+    log("Creating list of FavoriteRecipe objects... finished!");
 
     return favoriteRecipes;
   }
 
-  List<FavoriteRecipe> _favoriteRecipeListFromSnapshot(QuerySnapshot snapshot) {
-    List<FavoriteRecipe> result = snapshot.documents.map((doc) {
-      log("snapshot.documents.map(doc.data) : ${doc.data}");
-      List<dynamic> favoriteRecipeIDs = doc.data['favoriteRecipeIDs'];
-      return FavoriteRecipe(
-        foodName: doc.data['favoriteRecipeIDs'].toString() ?? '',
-        recipeID: doc.data['recipeID'] ?? 0,
-        recipe: doc.data['recipe'] ?? '',
-      );
-    }).toList();
-    log("_favoriteRecipeListFromSnapshot = ${result.toString()}");
-    return result;
+  Stream<List<FavoriteRecipe>> get favoriteRecipes {
+    return usersCollection.snapshots().map(getFavoriteRecipesFromSnapshot);
   }
 
-  Stream<List<FavoriteRecipe>> get favoriteRecipes {
-    //return usersCollection.snapshots().map(_favoriteRecipeListFromSnapshot);
-    return usersCollection.snapshots().map(getFavoriteRecipeList);
+  void get recipeData {
+    log("Retrieving recipe data...");
+    recipesCollection.snapshots().elementAt(0).then((x) {
+      List<DocumentSnapshot> docsList = x.documents;
+
+      // Get the recipe data from the database, and populate the food list
+      // instance variable with this data
+      log("${docsList.length} recipes found");
+      for (int i = 0; i < docsList.length; i++) {
+        String foodName = docsList[i].data["food"];
+        String foodRecipe = docsList[i].data["recipe"];
+        log("Retrieved recipe ${docsList[i].documentID}: $foodName");
+        recipes.add({foodName: foodRecipe});
+      }
+    });
+    log("Final recipe list retrieved from database: ${recipes.toString()}");
   }
 }
