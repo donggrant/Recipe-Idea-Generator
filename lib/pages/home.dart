@@ -35,7 +35,9 @@ class Home extends StatelessWidget {
             children: [
               RaisedButton(
                   child: Text("Get New Recipe Recommendation"),
-                  onPressed: () {}
+                  onPressed: () async {
+                    Constants().setPageToShow("Camera");
+                  },
               ),
               FavoriteRecipeList(),
             ],

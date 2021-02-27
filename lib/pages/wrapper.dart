@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/pages/forgot_password.dart';
@@ -5,8 +6,11 @@ import 'package:recipic/pages/home.dart';
 import 'package:recipic/pages/sign_in.dart';
 import 'package:recipic/ui_pages/ui_landing.dart';
 import 'package:recipic/ui_pages/ui_register.dart';
+import 'package:recipic/pages/camera.dart';
 
 class Wrapper extends StatefulWidget {
+  var cameras;
+  Wrapper(this.cameras);
   @override
   _WrapperState createState() => _WrapperState();
 }
@@ -19,6 +23,8 @@ class _WrapperState extends State<Wrapper> {
         valueListenable: Constants().getPageToShow(),
         builder: (BuildContext context, String value, Widget child) {
           switch (value) {
+            case "Camera":
+              return Camera(widget.cameras);
             case "Landing":
               return Landing();
             case "Loading":
