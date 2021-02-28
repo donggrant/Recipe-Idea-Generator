@@ -1,18 +1,14 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:recipic/models/constants.dart';
-import 'package:recipic/models/favorite_recipe.dart';
-import 'package:recipic/models/favorite_recipe_list.dart';
-import 'package:recipic/services/auth.dart';
-import 'package:recipic/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
 
 
 class Camera extends StatefulWidget {
 
-  final CameraDescription camera;
-  Camera(this.camera);
+  final List<CameraDescription> cameras;
+  Camera(this.cameras);
+
   @override
   _CameraState createState() => _CameraState();
 }
@@ -20,20 +16,13 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
 
   CameraController controller;
+  Future<void> _initializeControllerFuture;
 
   @override
   void initState() {
     super.initState();
-    controller = new CameraController(widget.camera, ResolutionPreset.medium);
-    controller.initialize().then((_){
-      if(!mounted){
-        return;
-      }
-      setState(() {});
-      if (controller.value.hasError) {
-        print('Camera error ${controller.value.errorDescription}');
-      }
-    });
+    controller = new CameraController(widget.cameras[0], ResolutionPreset.medium);
+    _initializeControllerFuture = controller.initialize();
   }
 
   @override
@@ -44,12 +33,29 @@ class _CameraState extends State<Camera> {
 
   @override
   Widget build(BuildContext context) {
-    if(!controller.value.isInitialized){
-      return new Container();
-    }
-    return new AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: new CameraPreview(controller),
+    return Scaffold(
+      appBar: AppBar(title: Text('Take Pictures of Food')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(controller);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.camera_alt),
+        onPressed: () async {
+          try {
+            await _initializeControllerFuture;
+            final image = await controller.takePicture();
+          } catch (e) {
+            print(e);
+          }
+        },
+      ),
     );
   }
 }
