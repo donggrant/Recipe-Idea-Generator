@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/models/favorite_recipe.dart';
 import 'package:recipic/models/favorite_recipe_list.dart';
+import 'package:recipic/pages/recipeWizard.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/services/database.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,12 @@ class Home extends StatelessWidget {
             children: [
               RaisedButton(
                   child: Text("Get New Recipe Recommendation"),
-                  onPressed: () {}
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RecipeWizardAddPhotos()),
+                    );
+                  }
               ),
               FavoriteRecipeList(),
             ],
