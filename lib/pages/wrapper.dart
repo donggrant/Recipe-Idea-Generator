@@ -23,8 +23,6 @@ class _WrapperState extends State<Wrapper> {
         valueListenable: Constants().getPageToShow(),
         builder: (BuildContext context, String value, Widget child) {
           switch (value) {
-            case "Camera":
-              return Camera(widget.cameras);
             case "Landing":
               return Landing();
             case "Loading":
@@ -36,7 +34,7 @@ class _WrapperState extends State<Wrapper> {
             case "Forgot Password":
               return ForgotPassword();
             case "Home":
-              return Home();
+              return Home(widget.cameras);
             default:
               return null;
           }

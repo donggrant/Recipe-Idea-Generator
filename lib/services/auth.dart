@@ -51,7 +51,7 @@ class AuthService {
 
       Constants().setCurrentUserID(user.uid);
 
-      return _userFromFirebaseUser(user);
+      return user;
     }catch(e){
       print(e.toString());
       return null;
@@ -69,9 +69,19 @@ class AuthService {
       // create new user document in database, here
 
       Constants().setCurrentUserID(user.uid);
-      return _userFromFirebaseUser(user);
+      return user;
     } catch(e){
       log(e.toString());
+      return null;
+    }
+  }
+
+  Future sendEmailVerification(FirebaseUser user) async {
+    try{
+      user.sendEmailVerification();
+      return _userFromFirebaseUser(user);
+    }catch(e){
+      print(e.toString());
       return null;
     }
   }

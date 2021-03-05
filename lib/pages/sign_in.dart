@@ -19,6 +19,32 @@ class _SignInState extends State<SignIn> {
   String password = '';
   String error = '';
 
+  void emailVerificationDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Verification Email Sent'),
+          content: SingleChildScrollView(
+            child: Text("Your account has not been verified. We have sent you another "
+                "email containing a link to "
+                "verify your email address. You must verify your email "
+                "address before you can sign in."),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -83,6 +109,9 @@ class _SignInState extends State<SignIn> {
                               error =
                               'could not sign in with those credentials';
                             });
+                          } else if (!result.isEmailVerified) {
+                            await Constants().getAuth().sendEmailVerification(result);
+                            emailVerificationDialog();
                           } else {
                             Constants().setPageToShow("Home");
                           }

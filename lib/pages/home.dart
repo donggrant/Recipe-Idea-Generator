@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/models/favorite_recipe.dart';
 import 'package:recipic/models/favorite_recipe_list.dart';
+import 'package:recipic/pages/recipeWizard.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:recipic/pages/camera.dart';
 
 class Home extends StatelessWidget {
+
+  var cameras;
+  Home(this.cameras);
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<FavoriteRecipe>>.value(
@@ -35,9 +41,12 @@ class Home extends StatelessWidget {
             children: [
               RaisedButton(
                   child: Text("Get New Recipe Recommendation"),
-                  onPressed: () async {
-                    Constants().setPageToShow("Camera");
-                  },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RecipeWizardAddPhotos(cameras)),
+                    );
+                  }
               ),
               FavoriteRecipeList(),
             ],
