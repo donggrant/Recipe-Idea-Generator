@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/pages/camera.dart';
+import 'dart:async';
+import 'dart:io';
 
 
 class RecipeWizardAddPhotos extends StatelessWidget {
@@ -42,7 +44,12 @@ class RecipeWizardAddPhotos extends StatelessWidget {
               SizedBox(width: 20),
               RaisedButton(
                 child: Text("Add Receipts"),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Camera(cameras)),
+                  );
+                },
               ),
             ],
           ),
@@ -62,5 +69,18 @@ class RecipeWizardAddPhotos extends StatelessWidget {
         ],
       ),
     );;
+  }
+}
+
+class DisplayPictureScreen extends StatelessWidget {
+  final String imagePath;
+  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Picture Display')),
+      body: Image.file(File(imagePath)),
+    );
   }
 }

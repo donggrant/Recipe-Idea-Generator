@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
+import 'package:recipic/pages/recipeWizard.dart';
 
 
 class Camera extends StatefulWidget {
@@ -51,6 +52,12 @@ class _CameraState extends State<Camera> {
           try {
             await _initializeControllerFuture;
             final image = await controller.takePicture();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DisplayPictureScreen(imagePath: image?.path),
+              ),
+            );
           } catch (e) {
             print(e);
           }
