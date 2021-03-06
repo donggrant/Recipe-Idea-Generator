@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipic/models/constants.dart';
+import 'package:recipic/services/auth.dart';
 
 class ForgotPasswordUI extends StatefulWidget {
   @override
@@ -10,6 +13,60 @@ class ForgotPasswordUI extends StatefulWidget {
 }
 
 class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  // text field state
+  String email = '';
+  String error = '';
+
+  void showValidEmailDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Email Sent'),
+          content: SingleChildScrollView(
+            child: Text(
+                "We have sent you an email containing a link to reset your password."),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInvalidEmailDialog(e) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: Text(e.toString()),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,22 +142,41 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
                       else
                         return null;
                     },
-                    onChanged: (string) {},
+                    onChanged: (val) {
+                      setState(() => email = val);
+                    },
                   ),
                   SizedBox(height: 15),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xFF6C63FF),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Center(
-                        child: Text(
-                          "Send",
-                          style: GoogleFonts.lato(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              textStyle: TextStyle(color: Colors.white)),
+                  GestureDetector(
+                    onTap: () async {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+
+                        try {
+                          dynamic result =
+                              await _auth.sendPasswordResetEmail(email);
+                          showValidEmailDialog();
+                        } catch (e) {
+                          // Show the exception in a dialog box
+                          log(e.toString());
+                          showInvalidEmailDialog(e);
+                        }
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFF6C63FF),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Center(
+                          child: Text(
+                            "Send",
+                            style: GoogleFonts.lato(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                textStyle: TextStyle(color: Colors.white)),
+                          ),
                         ),
                       ),
                     ),
