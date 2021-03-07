@@ -23,11 +23,18 @@ class RecipeWizardAddPhotos extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
-            child: Text("Welcome to the new recipe wizard! Here you can add pictures of "
-                "the food that you want us to suggest a recipe for. You can also "
-                "add pictures of grocery store receipts - we'll simply read what "
-                "food items you purchased. Once you're done adding pictures, click "
-                "the Next button."),
+            child: Column(
+              children: [
+                Text("Welcome to the new recipe wizard! Here you can add pictures of "
+                    "the food that you want us to suggest a recipe for. You can also "
+                    "add pictures of grocery store receipts - we'll simply read what "
+                    "food items you purchased. The pictures you take will be shown "
+                    "below."),
+                SizedBox(height: 20),
+                Text("You can also delete a picture you've taken by tapping on it. "
+                    "Once you're done adding pictures, click the Next button."),
+              ],
+            ),
           ),
           SizedBox(height: 20),
           Row(
@@ -115,6 +122,37 @@ class PicturesList extends StatefulWidget {
 }
 
 class _PicturesListState extends State<PicturesList> {
+
+  void deletePictureConfirmation(Image pic) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Picture?'),
+          content: SingleChildScrollView(
+            child: Text("Are you sure you want to delete this picture? This action cannot be undone."),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Constants().removePic(pic);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -124,14 +162,21 @@ class _PicturesListState extends State<PicturesList> {
           return ListView.builder(
             itemCount: Constants().getNumOfPics().value,
             itemBuilder: (context, index) {
-              return Card(
-                semanticContainer: true,
-                child: Constants().getPics()[index],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+              Image currentPicture = Constants().getPics()[index];
+              return GestureDetector(
+                child: Card(
+                  semanticContainer: true,
+                  child: currentPicture,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 10,
+                  margin: EdgeInsets.fromLTRB(90.0, 15.0, 90.0, 15.0),
                 ),
-                elevation: 10,
-                margin: EdgeInsets.fromLTRB(90.0, 15.0, 90.0, 15.0)
+                onTap: () {
+                  log("tapped picture");
+                  deletePictureConfirmation(currentPicture);
+                },
               );
             },
           );
