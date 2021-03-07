@@ -81,7 +81,7 @@ class DisplayPictureScreen extends StatelessWidget {
               RaisedButton(
                 child: Text("Use this Picture"),
                 onPressed: () {
-                  Constants().incrementNumOfPics();
+                  Constants().addPic(Image.file(File(imagePath)));
                   log("${Constants().getNumOfPics().value.toString()} pictures taken so far");
                   Navigator.pop(context); // pop once to go back to the camera screen
                   Navigator.pop(context); // pop again to go back to page 1 of the recipe wizard
@@ -118,13 +118,13 @@ class _PicturesListState extends State<PicturesList> {
             itemCount: Constants().getNumOfPics().value,
             itemBuilder: (context, index) {
               return Card(
-                  child: ListTile(
-                    tileColor: Color(0xFF6C63FF),
-                    title: Text(
-                      "Picture taken",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  )
+                semanticContainer: true,
+                child: Constants().getPics()[index],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10,
+                margin: EdgeInsets.fromLTRB(90.0, 15.0, 90.0, 15.0)
               );
             },
           );
