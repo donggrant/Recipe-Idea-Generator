@@ -55,8 +55,15 @@ class RecipeWizardAddPhotos extends StatelessWidget {
             ],
           ),
           PicturesList(),
-        ],
-    ),
+          SizedBox(height: 20),
+          Center(
+            child: RaisedButton(
+              child: Text("Next"),
+              onPressed: () {},
+            ),
+          ),
+        ]
+      ),
     );
   }
 }
