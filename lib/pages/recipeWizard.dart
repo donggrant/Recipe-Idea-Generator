@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/pages/camera.dart';
@@ -53,22 +54,10 @@ class RecipeWizardAddPhotos extends StatelessWidget {
               ),
             ],
           ),
-          Card(
-            semanticContainer: true,
-            //clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Image.asset(
-              "images/apple.jpg",
-              fit: BoxFit.fill,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 10,
-            margin: EdgeInsets.all(25),
-          ),
+          PicturesList(),
         ],
-      ),
-    );;
+    ),
+    );
   }
 }
 
@@ -78,9 +67,69 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("Image path: $imagePath");
+    log("Rebuilding PicturesList...");
     return Scaffold(
       appBar: AppBar(title: Text('Picture Display')),
-      body: Image.file(File(imagePath)),
+      body: Column(
+        children: [
+          Center(child: Image.file(File(imagePath))),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RaisedButton(
+                child: Text("Use this Picture"),
+                onPressed: () {
+                  Constants().incrementNumOfPics();
+                  log("${Constants().getNumOfPics().value.toString()} pictures taken so far");
+                  Navigator.pop(context); // pop once to go back to the camera screen
+                  Navigator.pop(context); // pop again to go back to page 1 of the recipe wizard
+                },
+              ),
+              SizedBox(width: 20),
+              RaisedButton(
+                child: Text("Retake Picture"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PicturesList extends StatefulWidget {
+  @override
+  _PicturesListState createState() => _PicturesListState();
+}
+
+class _PicturesListState extends State<PicturesList> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ValueListenableBuilder<int>(
+        valueListenable: Constants().getNumOfPics(),
+        builder: (BuildContext context, int value, Widget child) {
+          return ListView.builder(
+            itemCount: Constants().getNumOfPics().value,
+            itemBuilder: (context, index) {
+              return Card(
+                  child: ListTile(
+                    tileColor: Color(0xFF6C63FF),
+                    title: Text(
+                      "Picture taken",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  )
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

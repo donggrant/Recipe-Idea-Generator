@@ -6,6 +6,7 @@ class Constants {
   static ValueNotifier<String> _pageToShow = ValueNotifier<String>("Landing");
   static AuthService _auth = AuthService();
   static String currentUserID = "";
+  static ValueNotifier<int> _numOfPics = ValueNotifier<int>(0);
 
   AuthService getAuth() {
     return _auth;
@@ -25,6 +26,18 @@ class Constants {
 
   void setPageToShow(String newPage) {
     _pageToShow.value = newPage;
+  }
+
+  ValueNotifier<int> getNumOfPics() {
+    return _numOfPics;
+  }
+
+  void incrementNumOfPics() {
+    _numOfPics.value++;
+  }
+
+  void decrementNumOfPics() {
+    _numOfPics.value--;
   }
 }
 
