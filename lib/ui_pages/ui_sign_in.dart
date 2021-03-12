@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/services/auth.dart';
 
-class RegisterUI extends StatefulWidget {
+class SignInUI extends StatefulWidget {
   @override
-  _RegisterUIState createState() => _RegisterUIState();
+  _SignInUIState createState() => _SignInUIState();
 }
 
-class _RegisterUIState extends State<RegisterUI> {
+class _SignInUIState extends State<SignInUI> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -19,31 +18,6 @@ class _RegisterUIState extends State<RegisterUI> {
   String email = '';
   String password = '';
   String error = '';
-
-  void emailVerificationDialog() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Verification Email Sent'),
-          content: SingleChildScrollView(
-            child: Text("We have sent you an email containing a link to "
-                "verify your email address. You must verify your email "
-                "address before you can sign in."),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +42,6 @@ class _RegisterUIState extends State<RegisterUI> {
                       },
                     ),
                   ),
-                  Container(
-                    height: 200,
-                    child: Flexible(
-                      fit: FlexFit.loose,
-                      child: SvgPicture.asset(
-                        "images/result.svg",
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 25),
                   Flexible(
                     fit: FlexFit.loose,
@@ -84,7 +49,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hello there!",
+                          "Welcome Back!",
                           style: GoogleFonts.lato(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -94,7 +59,7 @@ class _RegisterUIState extends State<RegisterUI> {
                           height: 10,
                         ),
                         Text(
-                          "Let's create your account so you can get cooking.",
+                          "You've been missed. Let's get you signed in.",
                           style: GoogleFonts.sourceSansPro(
                               fontSize: 17,
                               textStyle: TextStyle(
@@ -151,61 +116,66 @@ class _RegisterUIState extends State<RegisterUI> {
                       setState(() => password = val);
                     },
                   ),
-                  SizedBox(height: 15),
-                  TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText: 'Confirm Password',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                    ),
-                    validator: (val) {
-                      if (val != password)
-                        return 'Passwords do not match';
-                      else
-                        return null;
-                    },
-                  ),
                   SizedBox(height: 20),
-                  //TODO: Add an agree to terms and conditions and privacy policy
-                  GestureDetector(
-                    onTap: () async {
-                      if (_formKey.currentState.validate()) {
-                        dynamic result = await _auth
-                            .registerWithEmailAndPassword(email, password);
-                        if (result == null) {
-                          setState(() {
-                            error = 'please supply a valid email';
-                          });
-                        } else {
-                          Constants().setPageToShow("Sign In");
-                          emailVerificationDialog();
-                        }
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xFF6C63FF),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Center(
-                          child: Text(
-                            "Create Account",
-                            style: GoogleFonts.lato(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                textStyle: TextStyle(color: Colors.white)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          if (_formKey.currentState.validate()) {
+                            dynamic result = await _auth
+                                .signInWithEmailAndPassword(email, password);
+                            if (result == null) {
+                              setState(() {
+                                error =
+                                    'could not sign in with those credentials';
+                              });
+                            } else {
+                              Constants().setPageToShow("Home");
+                            }
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xFF6C63FF),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Center(
+                              child: Text(
+                                "Sign In",
+                                style: GoogleFonts.lato(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    textStyle: TextStyle(color: Colors.white)),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: () {
+                          Constants().setPageToShow("Forgot Password");
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xFF6C63FF),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Center(
+                              child: Text(
+                                "Forgot Password?",
+                                style: GoogleFonts.lato(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    textStyle: TextStyle(color: Colors.white)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -214,7 +184,7 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                   // SignInButton(
                   //   Buttons.Google,
-                  //   text: "Sign up with Google",
+                  //   text: "Sign in with Google",
                   //   onPressed: () {
                   //     //TODO: Add Google Login
                   //   },
