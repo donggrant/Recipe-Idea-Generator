@@ -15,7 +15,7 @@ class _LandingState extends State<Landing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF6C63FF),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
@@ -24,7 +24,7 @@ class _LandingState extends State<Landing> {
               Expanded(
                 flex: 1,
                 child: SvgPicture.asset(
-                  "images/barbecue.svg",
+                  "images/undraw_barbecue_3x93.svg",
                 ),
               ),
               SizedBox(
@@ -48,7 +48,7 @@ class _LandingState extends State<Landing> {
                       style: GoogleFonts.sourceSansPro(
                           fontSize: 17,
                           textStyle: TextStyle(
-                            color: Colors.grey[300],
+                            color: Colors.grey[700],
                           )),
                     ),
                   ],
@@ -63,7 +63,7 @@ class _LandingState extends State<Landing> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Color(0xFF6C63FF),
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -73,7 +73,7 @@ class _LandingState extends State<Landing> {
                               style: GoogleFonts.lato(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  textStyle: TextStyle(color: Colors.black)),
+                                  textStyle: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ),
@@ -90,7 +90,7 @@ class _LandingState extends State<Landing> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Color(0xFF6C63FF),
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -100,7 +100,7 @@ class _LandingState extends State<Landing> {
                               style: GoogleFonts.lato(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  textStyle: TextStyle(color: Colors.black)),
+                                  textStyle: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ),

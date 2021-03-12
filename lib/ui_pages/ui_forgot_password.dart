@@ -1,36 +1,58 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipic/models/constants.dart';
 import 'package:recipic/services/auth.dart';
 
-class RegisterUI extends StatefulWidget {
+class ForgotPasswordUI extends StatefulWidget {
   @override
-  _RegisterUIState createState() => _RegisterUIState();
+  _ForgotPasswordUIState createState() => _ForgotPasswordUIState();
 }
 
-class _RegisterUIState extends State<RegisterUI> {
+class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   // text field state
   String email = '';
-  String password = '';
   String error = '';
 
-  void emailVerificationDialog() {
+  void showValidEmailDialog() {
     showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Verification Email Sent'),
+          title: Text('Email Sent'),
           content: SingleChildScrollView(
-            child: Text("We have sent you an email containing a link to "
-                "verify your email address. You must verify your email "
-                "address before you can sign in."),
+            child: Text(
+                "We have sent you an email containing a link to reset your password."),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showInvalidEmailDialog(e) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: Text(e.toString()),
           ),
           actions: <Widget>[
             TextButton(
@@ -48,32 +70,28 @@ class _RegisterUIState extends State<RegisterUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-            child: Form(
-              key: _formKey,
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
                     child: BackButton(
                       color: Color(0xFF6C63FF),
                       onPressed: () {
-                        Constants().setPageToShow("Landing");
+                        Constants().setPageToShow("Sign In");
                       },
                     ),
                   ),
                   Container(
-                    height: 200,
+                    height: 250,
                     child: Flexible(
                       fit: FlexFit.loose,
                       child: SvgPicture.asset(
-                        "images/result.svg",
+                        "images/undraw_forgot_password_gi2d.svg",
                       ),
                     ),
                   ),
@@ -81,20 +99,19 @@ class _RegisterUIState extends State<RegisterUI> {
                   Flexible(
                     fit: FlexFit.loose,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hello there!",
+                          "Forgot your password?",
                           style: GoogleFonts.lato(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 15,
                         ),
                         Text(
-                          "Let's create your account so you can get cooking.",
+                          "We'll send you instructions to reset your password. Enter the email address associated with your account. ",
                           style: GoogleFonts.sourceSansPro(
                               fontSize: 17,
                               textStyle: TextStyle(
@@ -104,7 +121,9 @@ class _RegisterUIState extends State<RegisterUI> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(
+                    height: 60,
+                  ),
                   TextFormField(
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
@@ -128,64 +147,19 @@ class _RegisterUIState extends State<RegisterUI> {
                     },
                   ),
                   SizedBox(height: 15),
-                  TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText: 'password',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                    ),
-                    validator: (val) {
-                      if (val.length < 6)
-                        return 'Enter a password 6+ chars long';
-                      else
-                        return null;
-                    },
-                    onChanged: (val) {
-                      setState(() => password = val);
-                    },
-                  ),
-                  SizedBox(height: 15),
-                  TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText: 'Confirm Password',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                    ),
-                    validator: (val) {
-                      if (val != password)
-                        return 'Passwords do not match';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  //TODO: Add an agree to terms and conditions and privacy policy
                   GestureDetector(
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
-                        dynamic result = await _auth
-                            .registerWithEmailAndPassword(email, password);
-                        if (result == null) {
-                          setState(() {
-                            error = 'please supply a valid email';
-                          });
-                        } else {
-                          Constants().setPageToShow("Sign In");
-                          emailVerificationDialog();
+                        _formKey.currentState.save();
+
+                        try {
+                          dynamic result =
+                              await _auth.sendPasswordResetEmail(email);
+                          showValidEmailDialog();
+                        } catch (e) {
+                          // Show the exception in a dialog box
+                          log(e.toString());
+                          showInvalidEmailDialog(e);
                         }
                       }
                     },
@@ -197,7 +171,7 @@ class _RegisterUIState extends State<RegisterUI> {
                         padding: const EdgeInsets.all(18.0),
                         child: Center(
                           child: Text(
-                            "Create Account",
+                            "Send",
                             style: GoogleFonts.lato(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -207,22 +181,8 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    error,
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                  // SignInButton(
-                  //   Buttons.Google,
-                  //   text: "Sign up with Google",
-                  //   onPressed: () {
-                  //     //TODO: Add Google Login
-                  //   },
-                  // ),
                 ],
-              ),
-            ),
-          ),
+              )),
         ),
       ),
     );
