@@ -124,27 +124,30 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
                   SizedBox(
                     height: 60,
                   ),
-                  TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      labelText: "Your Email",
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        labelText: "Your Email",
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        hintText: 'Email',
+                        hintStyle: TextStyle(color: Colors.grey[400]),
                       ),
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
+                      validator: (val) {
+                        if (val.isEmpty)
+                          return 'Enter an email';
+                        else
+                          return null;
+                      },
+                      onChanged: (val) {
+                        setState(() => email = val);
+                      },
                     ),
-                    validator: (val) {
-                      if (val.isEmpty)
-                        return 'Enter an email';
-                      else
-                        return null;
-                    },
-                    onChanged: (val) {
-                      setState(() => email = val);
-                    },
                   ),
                   SizedBox(height: 15),
                   GestureDetector(
