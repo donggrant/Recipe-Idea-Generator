@@ -7,6 +7,8 @@ import 'package:recipic/ui_pages/ui_register.dart';
 import 'package:recipic/ui_pages/ui_sign_in.dart';
 
 class Wrapper extends StatefulWidget {
+  var cameras;
+  Wrapper(this.cameras);
   @override
   _WrapperState createState() => _WrapperState();
 }
@@ -30,7 +32,7 @@ class _WrapperState extends State<Wrapper> {
             case "Forgot Password":
               return ForgotPasswordUI();
             case "Home":
-              return Home();
+              return Home(widget.cameras);
             default:
               return null;
           }

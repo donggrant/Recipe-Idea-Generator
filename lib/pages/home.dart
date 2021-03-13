@@ -7,8 +7,13 @@ import 'package:recipic/pages/recipeWizard.dart';
 import 'package:recipic/services/auth.dart';
 import 'package:recipic/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:recipic/pages/camera.dart';
 
 class Home extends StatelessWidget {
+
+  var cameras;
+  Home(this.cameras);
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<FavoriteRecipe>>.value(
@@ -39,7 +44,7 @@ class Home extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RecipeWizardAddPhotos()),
+                      MaterialPageRoute(builder: (context) => RecipeWizardAddPhotos(cameras)),
                     );
                   }
               ),
