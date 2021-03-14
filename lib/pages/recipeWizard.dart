@@ -4,6 +4,7 @@ import 'package:recipic/models/constants.dart';
 import 'package:recipic/pages/camera.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:recipic/services/process_image.dart';
 
 
 class RecipeWizardAddPhotos extends StatelessWidget {
@@ -66,7 +67,10 @@ class RecipeWizardAddPhotos extends StatelessWidget {
           Center(
             child: RaisedButton(
               child: Text("Next"),
-              onPressed: () {},
+              onPressed: () {
+                ProcessImage instance = ProcessImage(img:Constants().getPics()[0]);
+                instance.getIngredients();
+              },
             ),
           ),
         ]
